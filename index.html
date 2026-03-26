@@ -637,6 +637,17 @@
       </div>
     </div>
 
+    <!-- GDPR NOTICE -->
+    <div class="q-card" id="qgdpr-wrap" style="background:#f8f9fa;border-left:3px solid var(--teal);font-size:13px;color:var(--grey);line-height:1.6;">
+      <strong style="color:var(--navy);">Privacy &amp; Data Protection (GDPR)</strong><br>
+      By submitting this form, you consent to CarthageX Labs processing your personal data for research purposes. Your responses are confidential and will not be shared with third parties. You may request access, correction, or deletion of your data at any time by contacting <a href="mailto:privacy@carthagexlabs.xyz" style="color:var(--teal);">privacy@carthagexlabs.xyz</a>.
+      <label style="display:flex;align-items:flex-start;gap:8px;margin-top:12px;cursor:pointer;color:#202124;">
+        <input type="checkbox" name="gdpr_consent" value="Yes" required style="margin-top:3px;accent-color:var(--teal);">
+        <span>I have read and agree to the above data processing terms. <span class="req">*</span></span>
+      </label>
+      <div class="field-error">You must agree to continue.</div>
+    </div>
+
     <!-- SUBMIT -->
     <div class="submit-card">
       <div>
@@ -751,6 +762,16 @@ document.getElementById('survey-form').addEventListener('submit', async function
     valid = false;
   } else {
     docsWrap.classList.remove('has-error');
+  }
+
+  // GDPR consent checkbox
+  const gdprWrap = document.getElementById('qgdpr-wrap');
+  const gdprChecked = document.querySelector('input[name="gdpr_consent"]').checked;
+  if (!gdprChecked) {
+    gdprWrap.classList.add('has-error');
+    valid = false;
+  } else {
+    gdprWrap.classList.remove('has-error');
   }
 
   if (!valid) {
