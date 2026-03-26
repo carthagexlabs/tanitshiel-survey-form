@@ -360,7 +360,7 @@
     <div class="required-note"><span>*</span> Required</div>
   </div>
 
-  <form id="survey-form" name="survey" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+  <form id="survey-form" name="survey" action="/" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
     <input type="hidden" name="form-name" value="survey">
     <p style="display:none;"><label>Don't fill this out: <input name="bot-field"></label></p>
 
@@ -836,7 +836,9 @@ document.getElementById('survey-form').addEventListener('submit', async function
   // Submit via Netlify Forms
   try {
     const formData = new FormData(document.getElementById('survey-form'));
-    formData.append('form-name', 'survey');
+    if (!formData.has('form-name')) {
+      formData.append('form-name', 'survey');
+    }
     const res = await fetch('/', {
       method: 'POST',
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
