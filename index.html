@@ -833,19 +833,21 @@ document.getElementById('survey-form').addEventListener('submit', async function
 
   // Submit via Netlify Forms
   try {
+    const formData = new FormData(document.getElementById('survey-form'));
+    formData.append('form-name', 'survey');
     const res = await fetch('/', {
       method: 'POST',
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: new URLSearchParams(new FormData(document.getElementById('survey-form'))).toString()
+      body: new URLSearchParams(formData).toString()
     });
     if (res.ok) {
       showSuccess();
       return;
     }
-  } catch(err) {}
-
-  // Fallback: show error instead of navigating away
-  alert('Submission failed. Please check your connection and try again.');
+    alert('Submission failed (status ' + res.status + '). Please try again.');
+  } catch(err) {
+    alert('Submission failed: ' + err.message);
+  }
 });
 
 function showSuccess() {
