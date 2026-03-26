@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credential Verification Pain Point Survey · TanitShield (by CarthageX Labs) Research</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1B2A3D;
+    --teal: #14B8A6;
+    --teal-light: #e6faf8;
+    --teal-mid: #0d9488;
+    --slate: #3D5A6E;
+    --grey: #5f6368;
+    --grey-light: #f8f9fa;
+    --border: #dadce0;
+    --error: #d93025;
+    --white: #fff;
+    --card-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+    --font: 'Roboto', sans-serif;
+    --font-display: 'Google Sans', sans-serif;
+  }
+
+  body {
+    background: #f0f4f8;
+    font-family: var(--font);
+    color: #202124;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* TOP ACCENT BAR */
+  .top-bar {
+    height: 10px;
+    background: linear-gradient(90deg, var(--navy) 0%, var(--teal) 100%);
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 28px 0 0;
+    margin-top: 10px;
+  }
+
+  /* HEADER CARD */
+  .header-card {
+    position: relative;
+    background: var(--white);
+    border-radius: 8px 8px 0 0;
+    box-shadow: var(--card-shadow);
+    border-top: 10px solid var(--navy);
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+
+  .header-card-inner {
+    padding: 72px 24px 20px;
+  }
+
+  .brand-row {
+    position: absolute;
+    top: 12px;
+    left: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand-logo {
+    width: 40px; height: 40px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  .brand-logo img { width: 100%; height: 100%; object-fit: contain; }
+
+  .brand-logo svg { width: 18px; height: 18px; fill: var(--teal); }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .header-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    color: #202124;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .header-subtitle {
+    font-size: 13.5px;
+    color: var(--grey);
+    line-height: 1.6;
+  }
+
+  .privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--teal-light);
+    border: 1px solid var(--teal);
+    color: var(--teal-mid);
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-top: 12px;
+  }
+
+  .privacy-badge svg { width: 12px; height: 12px; fill: currentColor; }
+
+  .required-note {
+    font-size: 13px;
+    color: var(--grey);
+    padding: 10px 24px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+
+  .required-note span { color: var(--error); }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    padding: 18px 24px 14px;
+    margin-top: 12px;
+    border-left: 4px solid var(--teal);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+
+  .section-desc {
+    font-size: 12.5px;
+    color: var(--grey);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    padding: 20px 24px 22px;
+    margin-top: 10px;
+    position: relative;
+    transition: box-shadow 0.15s;
+  }
+
+  .q-card:focus-within {
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15);
+    border-left: 3px solid var(--teal);
+  }
+
+  .q-label {
+    font-size: 15px;
+    color: #202124;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    font-weight: 400;
+  }
+
+  .q-label .req { color: var(--error); margin-left: 2px; }
+
+  /* TEXT INPUT */
+  .text-input, .textarea-input, .select-input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    outline: none;
+    font-size: 14px;
+    font-family: var(--font);
+    color: #202124;
+    padding: 4px 0 6px;
+    background: transparent;
+    transition: border-color 0.15s;
+  }
+
+  .textarea-input {
+    resize: vertical;
+    min-height: 80px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin-top: 2px;
+  }
+
+  .text-input:focus, .textarea-input:focus {
+    border-color: var(--teal);
+    border-bottom-width: 2px;
+  }
+
+  .textarea-input:focus { border-color: var(--teal); outline: none; }
+
+  .select-input {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    appearance: none;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235f6368' d='M6 8L0 0h12z'/%3E%3C/svg%3E") no-repeat right 10px center;
+    cursor: pointer;
+  }
+
+  .select-input:focus { border-color: var(--teal); outline: none; }
+
+  /* RADIO & CHECKBOX */
+  .options-list { display: flex; flex-direction: column; gap: 4px; }
+
+  .option-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.1s;
+    min-height: 40px;
+  }
+
+  .option-item:hover { background: #f1f3f4; }
+
+  .option-item input[type="radio"],
+  .option-item input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: var(--teal);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .option-label { font-size: 14px; color: #202124; line-height: 1.4; }
+
+  /* LINEAR SCALE */
+  .scale-wrap { margin-top: 6px; }
+  .scale-labels { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--grey); margin-bottom: 8px; padding: 0 2px; }
+  .scale-options { display: flex; justify-content: space-between; gap: 4px; }
+  .scale-option { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
+  .scale-option input[type="radio"] { width: 18px; height: 18px; accent-color: var(--teal); cursor: pointer; }
+  .scale-option .scale-num { font-size: 12px; color: var(--grey); }
+
+  /* SUBMIT SECTION */
+  .submit-card {
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    padding: 20px 24px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .submit-btn {
+    background: var(--navy);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 28px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+    letter-spacing: 0.25px;
+  }
+
+  .submit-btn:hover { background: var(--slate); box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+  .submit-btn:active { background: #111d28; }
+
+  .clear-link { font-size: 13px; color: var(--teal-mid); cursor: pointer; text-decoration: none; }
+  .clear-link:hover { text-decoration: underline; }
+
+  /* SUCCESS STATE */
+  .success-card {
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    padding: 40px 24px;
+    margin-top: 12px;
+    text-align: center;
+    display: none;
+  }
+
+  .success-icon { font-size: 48px; margin-bottom: 16px; }
+  .success-title { font-family: var(--font-display); font-size: 22px; color: #202124; margin-bottom: 8px; }
+  .success-text { font-size: 14px; color: var(--grey); line-height: 1.6; }
+
+  /* ERROR STATE */
+  .field-error { display: none; font-size: 12px; color: var(--error); margin-top: 6px; }
+  .has-error .field-error { display: block; }
+  .has-error .text-input, .has-error .textarea-input { border-color: var(--error); }
+  .has-error .q-card { border-left: 3px solid var(--error); }
+
+  /* FOOTER */
+  .form-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #9aa0a6;
+    padding-bottom: 20px;
+  }
+
+  .form-footer a { color: var(--teal-mid); text-decoration: none; }
+
+  @media (max-width: 680px) {
+    .container { padding: 16px 12px 0; }
+    .header-card-inner, .q-card, .section-divider, .submit-card { padding-left: 16px; padding-right: 16px; }
+    .header-title { font-size: 22px; }
+    .scale-num { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header-card">
+    <div class="header-card-inner">
+      <div class="brand-row">
+        <div class="brand-logo">
+          <img src="logos/logo-tanitshield.png" alt="TanitShield Logo">
+        </div>
+        <span class="brand-name">TanitShield (by CarthageX Labs) · Research Study</span>
+      </div>
+      <h1 class="header-title">Credential Verification Pain Points in Cross-Border Talent Placement</h1>
+      <p class="header-subtitle">
+        This survey is part of an independent research study on the challenges staffing agencies and talent platforms face when verifying candidate credentials across borders — particularly in the Tunisia–Europe hiring corridor.<br><br>
+        Your responses will help shape privacy-preserving tools that reduce friction for companies like yours. The survey takes approximately <strong>5–7 minutes</strong>.
+      </p>
+      <div class="privacy-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.25 3.75 10.15 9 11.35C17.25 21.15 21 16.25 21 11V5l-9-4z"/></svg>
+        Responses are confidential and used for research purposes only
+      </div>
+    </div>
+    <div class="required-note"><span>*</span> Required</div>
+  </div>
+
+  <form id="survey-form" name="survey" method="POST" data-netlify="true" novalidate>
+
+    <!-- SECTION 1: PROFILE -->
+    <div class="section-divider">
+      <div class="section-title">Section 1 — Your Company Profile</div>
+      <div class="section-desc">Help us understand your organisational context so we can interpret your answers accurately.</div>
+    </div>
+
+    <div class="q-card" id="q1-wrap">
+      <div class="q-label">What is your role? <span class="req">*</span></div>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="role" value="Founder / CEO" required><span class="option-label">Founder / CEO</span></label>
+        <label class="option-item"><input type="radio" name="role" value="Head of Talent / Recruitment"><span class="option-label">Head of Talent / Recruitment</span></label>
+        <label class="option-item"><input type="radio" name="role" value="HR Manager"><span class="option-label">HR Manager</span></label>
+        <label class="option-item"><input type="radio" name="role" value="Operations / Compliance"><span class="option-label">Operations / Compliance</span></label>
+        <label class="option-item"><input type="radio" name="role" value="Other"><span class="option-label">Other</span></label>
+      </div>
+      <div class="field-error">Please select your role.</div>
+    </div>
+
+    <div class="q-card" id="q2-wrap">
+      <div class="q-label">What best describes your company? <span class="req">*</span></div>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="company_type" value="Staffing / Recruitment Agency" required><span class="option-label">Staffing / Recruitment Agency</span></label>
+        <label class="option-item"><input type="radio" name="company_type" value="Nearshore / Offshore Outsourcing Provider"><span class="option-label">Nearshore / Offshore Outsourcing Provider</span></label>
+        <label class="option-item"><input type="radio" name="company_type" value="Employer of Record (EOR) Platform"><span class="option-label">Employer of Record (EOR) Platform</span></label>
+        <label class="option-item"><input type="radio" name="company_type" value="Direct Employer (Tech / Engineering firm)"><span class="option-label">Direct Employer (Tech / Engineering firm)</span></label>
+        <label class="option-item"><input type="radio" name="company_type" value="Other"><span class="option-label">Other</span></label>
+      </div>
+      <div class="field-error">Please select a company type.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">In which country/region is your company headquartered?</div>
+      <select class="select-input" name="hq_country">
+        <option value="">Select a country or region</option>
+        <option>Tunisia</option>
+        <option>Germany</option>
+        <option>France</option>
+        <option>Netherlands</option>
+        <option>United Kingdom</option>
+        <option>UAE / Gulf region</option>
+        <option>Other EU country</option>
+        <option>Other (outside EU)</option>
+      </select>
+    </div>
+
+    <div class="q-card" id="q4-wrap">
+      <div class="q-label">How many international candidates (non-EU nationals) do you place or process per month? <span class="req">*</span></div>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="volume" value="Fewer than 5" required><span class="option-label">Fewer than 5</span></label>
+        <label class="option-item"><input type="radio" name="volume" value="5–20"><span class="option-label">5–20</span></label>
+        <label class="option-item"><input type="radio" name="volume" value="20–50"><span class="option-label">20–50</span></label>
+        <label class="option-item"><input type="radio" name="volume" value="50–100"><span class="option-label">50–100</span></label>
+        <label class="option-item"><input type="radio" name="volume" value="More than 100"><span class="option-label">More than 100</span></label>
+      </div>
+      <div class="field-error">Please select a volume range.</div>
+    </div>
+
+    <!-- SECTION 2: CURRENT PROCESS -->
+    <div class="section-divider">
+      <div class="section-title">Section 2 — Current Verification Process</div>
+      <div class="section-desc">We want to understand how you verify candidate credentials today — before placement or client presentation.</div>
+    </div>
+
+    <div class="q-card" id="q5-wrap">
+      <div class="q-label">How long does your credential verification process typically take per candidate? <span class="req">*</span></div>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="verify_time" value="Less than 24 hours" required><span class="option-label">Less than 24 hours</span></label>
+        <label class="option-item"><input type="radio" name="verify_time" value="1–3 days"><span class="option-label">1–3 days</span></label>
+        <label class="option-item"><input type="radio" name="verify_time" value="1–2 weeks"><span class="option-label">1–2 weeks</span></label>
+        <label class="option-item"><input type="radio" name="verify_time" value="2–6 weeks"><span class="option-label">2–6 weeks</span></label>
+        <label class="option-item"><input type="radio" name="verify_time" value="More than 6 weeks"><span class="option-label">More than 6 weeks</span></label>
+      </div>
+      <div class="field-error">Please select a time range.</div>
+    </div>
+
+    <div class="q-card" id="q6-wrap">
+      <div class="q-label">Which documents do you typically collect from candidates? <span class="req">*</span> <span style="font-size:12px;color:#5f6368;">(select all that apply)</span></div>
+      <div class="options-list">
+        <label class="option-item"><input type="checkbox" name="docs" value="Passport / National ID"><span class="option-label">Passport / National ID</span></label>
+        <label class="option-item"><input type="checkbox" name="docs" value="University degree / diploma"><span class="option-label">University degree / diploma</span></label>
+        <label class="option-item"><input type="checkbox" name="docs" value="Professional certifications"><span class="option-label">Professional certifications</span></label>
+        <label class="option-item"><input type="checkbox" name="docs" value="Employment history letters / references"><span class="option-label">Employment history letters / references</span></label>
+        <label class="option-item"><input type="checkbox" name="docs" value="Criminal background check"><span class="option-label">Criminal background check</span></label>
+        <label class="option-item"><input type="checkbox" name="docs" value="Translated documents (notarised)"><span class="option-label">Translated documents (notarised)</span></label>
+      </div>
+      <div class="field-error">Please select at least one document type.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Approximately how many internal HR hours do you spend verifying credentials per candidate?</div>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="hr_hours" value="Less than 1 hour"><span class="option-label">Less than 1 hour</span></label>
+        <label class="option-item"><input type="radio" name="hr_hours" value="1–3 hours"><span class="option-label">1–3 hours</span></label>
+        <label class="option-item"><input type="radio" name="hr_hours" value="3–8 hours"><span class="option-label">3–8 hours</span></label>
+        <label class="option-item"><input type="radio" name="hr_hours" value="8–15 hours"><span class="option-label">8–15 hours (1–2 business days)</span></label>
+        <label class="option-item"><input type="radio" name="hr_hours" value="More than 15 hours"><span class="option-label">More than 15 hours</span></label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">What is your estimated cost per background/credential check per candidate (including third-party services, if any)?</div>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="cost_per_check" value="We do it in-house (no direct cost)"><span class="option-label">We do it in-house (no direct cost)</span></label>
+        <label class="option-item"><input type="radio" name="cost_per_check" value="Under €20"><span class="option-label">Under €20</span></label>
+        <label class="option-item"><input type="radio" name="cost_per_check" value="€20–€50"><span class="option-label">€20–€50</span></label>
+        <label class="option-item"><input type="radio" name="cost_per_check" value="€50–€100"><span class="option-label">€50–€100</span></label>
+        <label class="option-item"><input type="radio" name="cost_per_check" value="More than €100"><span class="option-label">More than €100</span></label>
+        <label class="option-item"><input type="radio" name="cost_per_check" value="I don't track this"><span class="option-label">I don't track this</span></label>
+      </div>
+    </div>
+
+    <!-- SECTION 3: PAIN POINTS -->
+    <div class="section-divider">
+      <div class="section-title">Section 3 — Pain Points & Friction</div>
+      <div class="section-desc">This is the core of our research. We want to understand where the real friction lies.</div>
+    </div>
+
+    <div class="q-card" id="q9-wrap">
+      <div class="q-label">How significant are each of the following challenges in your current credential verification workflow? <span class="req">*</span></div>
+      <div style="margin-top:10px;overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:8px 6px 8px 0;font-weight:500;color:#5f6368;min-width:180px;">Challenge</th>
+              <th style="text-align:center;padding:8px 4px;font-weight:500;color:#5f6368;min-width:60px;font-size:11px;">Not an issue</th>
+              <th style="text-align:center;padding:8px 4px;font-weight:500;color:#5f6368;min-width:60px;font-size:11px;">Minor friction</th>
+              <th style="text-align:center;padding:8px 4px;font-weight:500;color:#5f6368;min-width:60px;font-size:11px;">Significant pain</th>
+              <th style="text-align:center;padding:8px 4px;font-weight:500;color:#5f6368;min-width:60px;font-size:11px;">Critical blocker</th>
+            </tr>
+          </thead>
+          <tbody id="matrix-body"></tbody>
+        </table>
+      </div>
+      <div class="field-error">Please rate at least one challenge.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Have you ever lost a candidate or a client placement because credential verification took too long?</div>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="lost_deal" value="Yes, this has happened more than once"><span class="option-label">Yes, this has happened more than once</span></label>
+        <label class="option-item"><input type="radio" name="lost_deal" value="Yes, this happened once or twice"><span class="option-label">Yes, this happened once or twice</span></label>
+        <label class="option-item"><input type="radio" name="lost_deal" value="Not directly, but it delayed placements"><span class="option-label">Not directly, but it delayed placements</span></label>
+        <label class="option-item"><input type="radio" name="lost_deal" value="No"><span class="option-label">No</span></label>
+        <label class="option-item"><input type="radio" name="lost_deal" value="Not sure / can't measure"><span class="option-label">Not sure / can't measure this</span></label>
+      </div>
+    </div>
+
+    <div class="q-card" id="q11-wrap">
+      <div class="q-label">How concerned are you about GDPR compliance when storing or transmitting candidate documents? <span class="req">*</span></div>
+      <div class="scale-wrap">
+        <div class="scale-labels">
+          <span>Not concerned at all</span>
+          <span>Extremely concerned</span>
+        </div>
+        <div class="scale-options">
+          <div class="scale-option"><input type="radio" name="gdpr_concern" value="1" required><span class="scale-num">1</span></div>
+          <div class="scale-option"><input type="radio" name="gdpr_concern" value="2"><span class="scale-num">2</span></div>
+          <div class="scale-option"><input type="radio" name="gdpr_concern" value="3"><span class="scale-num">3</span></div>
+          <div class="scale-option"><input type="radio" name="gdpr_concern" value="4"><span class="scale-num">4</span></div>
+          <div class="scale-option"><input type="radio" name="gdpr_concern" value="5"><span class="scale-num">5</span></div>
+        </div>
+      </div>
+      <div class="field-error">Please select a rating.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Have you ever encountered suspected or confirmed credential fraud from a candidate?</div>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="fraud_exp" value="Yes, confirmed fraud"><span class="option-label">Yes, confirmed fraud</span></label>
+        <label class="option-item"><input type="radio" name="fraud_exp" value="Yes, suspected but unconfirmed"><span class="option-label">Yes, suspected but unconfirmed</span></label>
+        <label class="option-item"><input type="radio" name="fraud_exp" value="No, but it's a concern"><span class="option-label">No, but it's a concern</span></label>
+        <label class="option-item"><input type="radio" name="fraud_exp" value="No, and I'm not particularly worried"><span class="option-label">No, and I'm not particularly worried</span></label>
+      </div>
+    </div>
+
+    <!-- SECTION 4: OPENNESS -->
+    <div class="section-divider">
+      <div class="section-title">Section 4 — Openness to New Solutions</div>
+      <div class="section-desc">We are exploring privacy-preserving credential technology. These questions gauge your openness — no commitment implied.</div>
+    </div>
+
+    <div class="q-card" id="q13-wrap">
+      <div class="q-label">If a candidate could share a <strong>cryptographic proof</strong> of their degree (e.g. "valid Computer Science BSc") without sending you the actual document or PDF scan, would that be valuable to you? <span class="req">*</span></div>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="zk_interest" value="Very valuable — this is exactly what I need" required><span class="option-label">Very valuable — this is exactly what I need</span></label>
+        <label class="option-item"><input type="radio" name="zk_interest" value="Somewhat valuable — depending on adoption"><span class="option-label">Somewhat valuable — depending on adoption</span></label>
+        <label class="option-item"><input type="radio" name="zk_interest" value="Neutral — I'd need to learn more"><span class="option-label">Neutral — I'd need to learn more</span></label>
+        <label class="option-item"><input type="radio" name="zk_interest" value="Not valuable — I prefer traditional documents"><span class="option-label">Not valuable — I prefer traditional documents</span></label>
+      </div>
+      <div class="field-error">Please select an option.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">What would need to be true for you to adopt a digital credential verification system in your workflow?</div>
+      <div class="options-list">
+        <label class="option-item"><input type="checkbox" name="adoption_condition" value="Clients/employers must accept it"><span class="option-label">Clients / employers must accept it first</span></label>
+        <label class="option-item"><input type="checkbox" name="adoption_condition" value="Universities must issue digital credentials"><span class="option-label">Universities and institutions must issue digital credentials</span></label>
+        <label class="option-item"><input type="checkbox" name="adoption_condition" value="Must be GDPR certified"><span class="option-label">Must be GDPR certified / legally audited</span></label>
+        <label class="option-item"><input type="checkbox" name="adoption_condition" value="Must integrate with our existing tools"><span class="option-label">Must integrate with our existing ATS / HR tools</span></label>
+        <label class="option-item"><input type="checkbox" name="adoption_condition" value="Must be free or low cost"><span class="option-label">Must be free or low cost to implement</span></label>
+        <label class="option-item"><input type="checkbox" name="adoption_condition" value="I need a live demo first"><span class="option-label">I need a live demo first</span></label>
+      </div>
+    </div>
+
+    <div class="q-card" id="q15-wrap">
+      <div class="q-label">How likely would you be to participate in a free 3-month pilot of a privacy-preserving credential verification tool embedded in your workflow? <span class="req">*</span></div>
+      <div class="scale-wrap">
+        <div class="scale-labels">
+          <span>Very unlikely</span>
+          <span>Very likely</span>
+        </div>
+        <div class="scale-options">
+          <div class="scale-option"><input type="radio" name="pilot_likelihood" value="1" required><span class="scale-num">1</span></div>
+          <div class="scale-option"><input type="radio" name="pilot_likelihood" value="2"><span class="scale-num">2</span></div>
+          <div class="scale-option"><input type="radio" name="pilot_likelihood" value="3"><span class="scale-num">3</span></div>
+          <div class="scale-option"><input type="radio" name="pilot_likelihood" value="4"><span class="scale-num">4</span></div>
+          <div class="scale-option"><input type="radio" name="pilot_likelihood" value="5"><span class="scale-num">5</span></div>
+        </div>
+      </div>
+      <div class="field-error">Please select a rating.</div>
+    </div>
+
+    <!-- SECTION 5: OPEN ENDS -->
+    <div class="section-divider">
+      <div class="section-title">Section 5 — In Your Own Words</div>
+      <div class="section-desc">These open questions give us the richest insights. Your candid thoughts are the most valuable input.</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">In your experience, what is the <strong>single biggest friction point</strong> in the cross-border credential verification process?</div>
+      <textarea class="textarea-input" name="biggest_friction" placeholder="Describe the most frustrating or costly aspect of verifying international candidate credentials..." rows="4"></textarea>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">If you could wave a magic wand and fix one thing about credential verification today, what would it be?</div>
+      <textarea class="textarea-input" name="magic_fix" placeholder="Your answer..." rows="3"></textarea>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Any other comments, or would you be open to a 20-minute follow-up conversation? If yes, please leave your name and email.</div>
+      <textarea class="textarea-input" name="followup" placeholder="Optional: your name, email, or any additional thoughts..." rows="3"></textarea>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-card">
+      <div>
+        <button type="submit" class="submit-btn">Submit Survey</button>
+        <div style="font-size:12px;color:#9aa0a6;margin-top:8px;">You will receive a confirmation once submitted.</div>
+      </div>
+      <a href="#" class="clear-link" onclick="clearForm(event)">Clear form</a>
+    </div>
+
+  </form>
+
+  <!-- SUCCESS -->
+  <div class="success-card" id="success-card">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Thank you for your response!</div>
+    <p class="success-text">Your insights have been recorded and will directly inform the development of TanitShield.<br><br>If you left your contact details and are open to a follow-up call, we will reach out within 5 business days.<br><br><strong>CarthageX Labs · TanitShield</strong><br><a href="https://carthagexlabs.xyz" style="color:#14B8A6;">carthagexlabs.xyz</a></p>
+  </div>
+
+  <div class="form-footer">
+    <p>This form is administered by <a href="https://carthagexlabs.xyz">CarthageX Labs</a> for research purposes.<br>
+    Responses are confidential and will not be shared with third parties.<br>
+    <a href="https://carthagexlabs.xyz">TanitShield · Where Proof Becomes Trust</a></p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;margin-top:16px;margin-bottom:16px;padding:10px;">
+    <span style="font-size:13px;color:#5f6368;letter-spacing:0.3px;">A research initiative by</span>
+    <a href="https://carthagexlabs.xyz" target="_blank"><img src="logos/logo-cxlabs.png" alt="CarthageX Labs Logo" style="height:48px;width:auto;"></a>
+  </div>
+
+</div>
+
+<script>
+// MATRIX CHALLENGES
+const challenges = [
+  "Time taken to collect and verify documents",
+  "GDPR / data privacy compliance risks",
+  "Risk of forged or misrepresented credentials",
+  "Cost of third-party verification services",
+  "Language barriers (translated / notarised docs)",
+  "Delays causing candidates to drop off",
+  "German client pushback on document quality",
+  "Lack of standardised digital credential formats",
+];
+
+const ratings = ["Not an issue","Minor friction","Significant pain","Critical blocker"];
+
+const tbody = document.getElementById('matrix-body');
+challenges.forEach((ch, i) => {
+  const tr = document.createElement('tr');
+  tr.style.cssText = i % 2 === 0 ? 'background:#f8f9fa;' : '';
+  let cells = `<td style="padding:10px 6px 10px 0;font-size:13px;color:#202124;">${ch}</td>`;
+  ratings.forEach(r => {
+    cells += `<td style="text-align:center;padding:10px 4px;">
+      <input type="radio" name="challenge_${i}" value="${r}" style="width:16px;height:16px;accent-color:#14B8A6;cursor:pointer;">
+    </td>`;
+  });
+  tr.innerHTML = cells;
+  tbody.appendChild(tr);
+});
+
+// FORM SUBMIT
+document.getElementById('survey-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  // Basic validation
+  const required = [
+    {id: 'q1-wrap', name: 'role'},
+    {id: 'q2-wrap', name: 'company_type'},
+    {id: 'q4-wrap', name: 'volume'},
+    {id: 'q5-wrap', name: 'verify_time'},
+    {id: 'q11-wrap', name: 'gdpr_concern'},
+    {id: 'q13-wrap', name: 'zk_interest'},
+    {id: 'q15-wrap', name: 'pilot_likelihood'},
+  ];
+
+  let valid = true;
+  required.forEach(({id, name}) => {
+    const wrap = document.getElementById(id);
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    if (!checked) {
+      wrap.classList.add('has-error');
+      valid = false;
+    } else {
+      wrap.classList.remove('has-error');
+    }
+  });
+
+  // Checkbox: docs
+  const docsWrap = document.getElementById('q6-wrap');
+  const docsChecked = document.querySelectorAll('input[name="docs"]:checked');
+  if (docsChecked.length === 0) {
+    docsWrap.classList.add('has-error');
+    valid = false;
+  } else {
+    docsWrap.classList.remove('has-error');
+  }
+
+  if (!valid) {
+    document.querySelector('.has-error').scrollIntoView({behavior: 'smooth', block: 'center'});
+    return;
+  }
+
+  // Collect responses
+  const fd = new FormData(this);
+  const data = {};
+  for (let [k, v] of fd.entries()) {
+    if (data[k]) {
+      data[k] = Array.isArray(data[k]) ? [...data[k], v] : [data[k], v];
+    } else {
+      data[k] = v;
+    }
+  }
+
+  // Matrix
+  challenges.forEach((ch, i) => {
+    const sel = document.querySelector(`input[name="challenge_${i}"]:checked`);
+    data[`challenge_${i}_label`] = ch;
+    data[`challenge_${i}_rating`] = sel ? sel.value : 'Not answered';
+  });
+
+  // Build readable email body
+  let body = `TanitShield Pain Point Survey — New Response\n`;
+  body += `Submitted: ${new Date().toLocaleString()}\n\n`;
+  body += `--- PROFILE ---\n`;
+  body += `Role: ${data.role || '-'}\n`;
+  body += `Company Type: ${data.company_type || '-'}\n`;
+  body += `HQ Country: ${data.hq_country || '-'}\n`;
+  body += `Monthly Volume: ${data.volume || '-'}\n\n`;
+  body += `--- CURRENT PROCESS ---\n`;
+  body += `Verification Time: ${data.verify_time || '-'}\n`;
+  body += `Documents Collected: ${Array.isArray(data.docs) ? data.docs.join(', ') : data.docs || '-'}\n`;
+  body += `HR Hours per Candidate: ${data.hr_hours || '-'}\n`;
+  body += `Cost per Check: ${data.cost_per_check || '-'}\n\n`;
+  body += `--- PAIN POINTS ---\n`;
+  challenges.forEach((ch, i) => {
+    body += `${ch}: ${data[`challenge_${i}_rating`]}\n`;
+  });
+  body += `\nLost a deal due to verification: ${data.lost_deal || '-'}\n`;
+  body += `GDPR Concern (1-5): ${data.gdpr_concern || '-'}\n`;
+  body += `Fraud Experience: ${data.fraud_exp || '-'}\n\n`;
+  body += `--- OPENNESS TO SOLUTIONS ---\n`;
+  body += `ZK Proof Interest: ${data.zk_interest || '-'}\n`;
+  body += `Adoption Conditions: ${Array.isArray(data.adoption_condition) ? data.adoption_condition.join(', ') : data.adoption_condition || '-'}\n`;
+  body += `Pilot Likelihood (1-5): ${data.pilot_likelihood || '-'}\n\n`;
+  body += `--- OPEN RESPONSES ---\n`;
+  body += `Biggest Friction: ${data.biggest_friction || '-'}\n\n`;
+  body += `Magic Fix: ${data.magic_fix || '-'}\n\n`;
+  body += `Follow-up Contact: ${data.followup || '-'}\n`;
+
+  // Submit via Netlify Forms
+  try {
+    const res = await fetch('/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: new URLSearchParams(new FormData(document.getElementById('survey-form'))).toString()
+    });
+    if (res.ok) {
+      showSuccess();
+      return;
+    }
+  } catch(err) {}
+
+  // Fallback: submit the form normally
+  document.getElementById('survey-form').submit();
+});
+
+function showSuccess() {
+  document.getElementById('survey-form').style.display = 'none';
+  const s = document.getElementById('success-card');
+  s.style.display = 'block';
+  s.scrollIntoView({behavior: 'smooth'});
+}
+
+function clearForm(e) {
+  e.preventDefault();
+  if (confirm('Clear all answers and start over?')) {
+    document.getElementById('survey-form').reset();
+    document.querySelectorAll('.has-error').forEach(el => el.classList.remove('has-error'));
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+}
+</script>
+</body>
+</html>
