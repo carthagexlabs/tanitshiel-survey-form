@@ -368,6 +368,30 @@
       <div class="section-desc">Help us understand your organisational context so we can interpret your answers accurately.</div>
     </div>
 
+    <div class="q-card" id="qfirstname-wrap">
+      <div class="q-label">First Name <span class="req">*</span></div>
+      <input type="text" class="text-input" name="first_name" placeholder="e.g. John" required>
+      <div class="field-error">Please enter your first name.</div>
+    </div>
+
+    <div class="q-card" id="qlastname-wrap">
+      <div class="q-label">Last Name <span class="req">*</span></div>
+      <input type="text" class="text-input" name="last_name" placeholder="e.g. Smith" required>
+      <div class="field-error">Please enter your last name.</div>
+    </div>
+
+    <div class="q-card" id="qcompany-wrap">
+      <div class="q-label">Company Name <span class="req">*</span></div>
+      <input type="text" class="text-input" name="company_name" placeholder="e.g. Acme Corp" required>
+      <div class="field-error">Please enter your company name.</div>
+    </div>
+
+    <div class="q-card" id="qemail-wrap">
+      <div class="q-label">Work Email <span class="req">*</span></div>
+      <input type="email" class="text-input" name="work_email" placeholder="you@company.com" required>
+      <div class="field-error">Please enter a valid work email address.</div>
+    </div>
+
     <div class="q-card" id="q1-wrap">
       <div class="q-label">What is your role? <span class="req">*</span></div>
       <div class="options-list">
@@ -601,8 +625,16 @@
     </div>
 
     <div class="q-card">
-      <div class="q-label">Any other comments, or would you be open to a 20-minute follow-up conversation? If yes, please leave your name and email.</div>
-      <textarea class="textarea-input" name="followup" placeholder="Optional: your name, email, or any additional thoughts..." rows="3"></textarea>
+      <div class="q-label">Any other comments?</div>
+      <textarea class="textarea-input" name="comments" placeholder="Any additional thoughts..." rows="3"></textarea>
+    </div>
+
+    <div class="q-card">
+      <div class="q-label">Would you be open to a 20-minute follow-up conversation?</div>
+      <div class="options-list">
+        <label class="option-item"><input type="radio" name="followup_call" value="Yes"><span class="option-label">Yes</span></label>
+        <label class="option-item"><input type="radio" name="followup_call" value="No"><span class="option-label">No</span></label>
+      </div>
     </div>
 
     <!-- SUBMIT -->
@@ -681,6 +713,25 @@ document.getElementById('survey-form').addEventListener('submit', async function
   ];
 
   let valid = true;
+
+  // Validate text/email fields
+  const textFields = [
+    {id: 'qfirstname-wrap', name: 'first_name'},
+    {id: 'qlastname-wrap', name: 'last_name'},
+    {id: 'qcompany-wrap', name: 'company_name'},
+    {id: 'qemail-wrap', name: 'work_email'},
+  ];
+  textFields.forEach(({id, name}) => {
+    const wrap = document.getElementById(id);
+    const input = document.querySelector(`input[name="${name}"]`);
+    if (!input.value.trim() || (input.type === 'email' && !input.validity.valid)) {
+      wrap.classList.add('has-error');
+      valid = false;
+    } else {
+      wrap.classList.remove('has-error');
+    }
+  });
+
   required.forEach(({id, name}) => {
     const wrap = document.getElementById(id);
     const checked = document.querySelector(`input[name="${name}"]:checked`);
@@ -729,6 +780,10 @@ document.getElementById('survey-form').addEventListener('submit', async function
   let body = `TanitShield Pain Point Survey — New Response\n`;
   body += `Submitted: ${new Date().toLocaleString()}\n\n`;
   body += `--- PROFILE ---\n`;
+  body += `First Name: ${data.first_name || '-'}\n`;
+  body += `Last Name: ${data.last_name || '-'}\n`;
+  body += `Company Name: ${data.company_name || '-'}\n`;
+  body += `Work Email: ${data.work_email || '-'}\n`;
   body += `Role: ${data.role || '-'}\n`;
   body += `Company Type: ${data.company_type || '-'}\n`;
   body += `HQ Country: ${data.hq_country || '-'}\n`;
@@ -752,7 +807,8 @@ document.getElementById('survey-form').addEventListener('submit', async function
   body += `--- OPEN RESPONSES ---\n`;
   body += `Biggest Friction: ${data.biggest_friction || '-'}\n\n`;
   body += `Magic Fix: ${data.magic_fix || '-'}\n\n`;
-  body += `Follow-up Contact: ${data.followup || '-'}\n`;
+  body += `Comments: ${data.comments || '-'}\n`;
+  body += `Open to Follow-up Call: ${data.followup_call || '-'}\n`;
 
   // Submit via Netlify Forms
   try {
